@@ -1,0 +1,31 @@
+You are a question-answering assistant. Your task is to answer the user's question based on the provided context from a knowledge graph.
+
+---
+Example:
+
+Context from Knowledge Graph:
+---
+The object titled 'Demonstration Brass Telescope' has the following properties:
+- creator: Example Scientific Works
+- creation_date: 1910
+- material: brass and glass
+---
+
+Question:
+Who created 'Demonstration Brass Telescope'?
+
+Answer:
+Example Scientific Works
+---
+
+Now, answer the following question based on the provided context. Provide only the answer.
+
+Context from Knowledge Graph:
+---
+{context}
+---
+
+Question:
+{question}
+
+Answer:

@@ -1,0 +1,59 @@
+[
+  {
+    "opacObjectId": "SYN-001",
+    "opacObjectFieldSets": [
+      {"identifier": "name", "opacObjectFields": [{"value": "Demonstration Brass Telescope"}]},
+      {"identifier": "description", "opacObjectFields": [{"value": "A fictional teaching telescope created for the MuseKG public example."}]},
+      {"identifier": "material_desc", "opacObjectFields": [{"value": "Brass and glass"}]},
+      {"identifier": "accession_no", "opacObjectFields": [{"value": "SYN-001"}]},
+      {"identifier": "production_date", "opacObjectFields": [{"value": "1910"}]},
+      {"identifier": "object_type", "opacObjectFields": [{"value": "Teaching instrument"}]},
+      {"identifier": "collection", "opacObjectFields": [{"value": "Fictional Instrument Collection"}]},
+      {"identifier": "museum", "opacObjectFields": [{"value": "MuseKG Example Museum"}]}
+    ],
+    "relationshipsCollection": {
+      "relationships": [
+        {
+          "relationshipId": "object_prod_pri_org",
+          "relatedRecords": [
+            {"relatedRecordId": "ORG-001", "relatedRecordType": "organisation", "title": "Example Scientific Works"}
+          ]
+        },
+        {
+          "relationshipId": "object_au_related",
+          "relatedRecords": [
+            {"relatedRecordId": "SYN-002", "relatedRecordType": "object", "title": "Ceramic Calibration Weight"}
+          ]
+        }
+      ]
+    },
+    "imagesCollection": {
+      "images": [{"imageLabels": [{"imageLabel": "optical instrument"}]}]
+    }
+  },
+  {
+    "opacObjectId": "SYN-002",
+    "opacObjectFieldSets": [
+      {"identifier": "name", "opacObjectFields": [{"value": "Ceramic Calibration Weight"}]},
+      {"identifier": "description", "opacObjectFields": [{"value": "A fictional ceramic mass used to test the example graph."}]},
+      {"identifier": "material_desc", "opacObjectFields": [{"value": "Glazed ceramic"}]},
+      {"identifier": "accession_no", "opacObjectFields": [{"value": "SYN-002"}]},
+      {"identifier": "museum", "opacObjectFields": [{"value": "MuseKG Example Museum"}]}
+    ],
+    "relationshipsCollection": {"relationships": []},
+    "imagesCollection": {"images": []}
+  },
+  {
+    "opacObjectId": "SYN-003",
+    "opacObjectFieldSets": [
+      {"identifier": "name", "opacObjectFields": [{"value": "Painted Weather Dial"}]},
+      {"identifier": "description", "opacObjectFields": [{"value": "A wholly invented weather dial for demonstrating bring-your-own-data workflows."}]},
+      {"identifier": "material_desc", "opacObjectFields": [{"value": "Painted wood and paper"}]},
+      {"identifier": "accession_no", "opacObjectFields": [{"value": "SYN-003"}]},
+      {"identifier": "history_cat", "opacObjectFields": [{"value": "Fictional meteorology"}]},
+      {"identifier": "museum", "opacObjectFields": [{"value": "MuseKG Example Museum"}]}
+    ],
+    "relationshipsCollection": {"relationships": []},
+    "imagesCollection": {"images": [{"imageLabels": [{"imageLabel": "weather"}]}]}
+  }
+]

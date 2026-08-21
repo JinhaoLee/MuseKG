@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use MuseKG, please cite the accompanying paper."
+title: "MuseKG"
+type: software
+version: 0.1.0
+authors:
+  - given-names: Jinhao
+    family-names: Li
+    orcid: "https://orcid.org/0009-0006-9301-5579"
+  - given-names: Jianzhong
+    family-names: Qi
+    orcid: "https://orcid.org/0000-0001-6501-9050"
+  - given-names: Soyeon Caren
+    family-names: Han
+    orcid: "https://orcid.org/0000-0002-1948-6819"
+  - given-names: Eun-Jung
+    family-names: Holden
+    orcid: "https://orcid.org/0000-0002-8752-1639"
+repository-code: "https://github.com/JinhaoLee/MuseKG"
+preferred-citation:
+  type: conference-paper
+  title: "MuseKG: An Interactive Knowledge Graph Over Museum Collections"
+  authors:
+    - given-names: Jinhao
+      family-names: Li
+    - given-names: Jianzhong
+      family-names: Qi
+    - given-names: Soyeon Caren
+      family-names: Han
+    - given-names: Eun-Jung
+      family-names: Holden
+  conference:
+    name: "Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval"
+  doi: "10.1145/3805712.3808366"
+  year: 2026
