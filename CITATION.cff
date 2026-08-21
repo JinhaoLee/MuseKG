@@ -31,5 +31,7 @@ preferred-citation:
       family-names: Holden
   conference:
     name: "Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval"
+  start: 5176
+  end: 5181
   doi: "10.1145/3805712.3808366"
   year: 2026

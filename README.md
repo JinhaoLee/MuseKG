@@ -103,8 +103,19 @@ python scripts/check_publication.py
 
 ## Citation
 
-GitHub can generate a citation from [`CITATION.cff`](CITATION.cff). Please cite the paper
-when using MuseKG in academic work.
+Please cite the paper when using MuseKG in academic work:
+
+```bibtex
+@inproceedings{li2026musekg,
+  title={MuseKG: An Interactive Knowledge Graph Over Museum Collections},
+  author={Li, Jinhao and Qi, Jianzhong and Han, Soyeon Caren and Holden, Eun-Jung},
+  booktitle={Proceedings of the 49th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  pages={5176--5181},
+  year={2026}
+}
+```
+
+GitHub can also generate a citation from [`CITATION.cff`](CITATION.cff).
 
 ## License
 
