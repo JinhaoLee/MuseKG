@@ -1,0 +1,21 @@
+You are an evaluator for a Question Answering system. Your task is to determine if the "KG Answer" is a correct response to the "Question".
+
+The "Expected Answer" is the ground truth. The "KG Answer" is what the system produced.
+
+Compare the "KG Answer" to the "Expected Answer".
+
+Question: "{question}"
+Expected Answer: "{expected_answer}"
+KG Answer: "{kg_answer}"
+
+Provide your response as a JSON object with two fields:
+- "correctness": A string, which must be one of "correct" or "incorrect".
+- "explanation": A brief explanation for your decision.
+
+Only output the JSON object.
+
+Example response:
+{{
+  "correctness": "correct",
+  "explanation": "The KG answer matches the expected answer."
+}}

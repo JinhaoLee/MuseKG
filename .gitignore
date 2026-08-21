@@ -1,0 +1,33 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Private/local collection material
+data/*
+!data/README.md
+demo/static/images/
+demo/static/image_mapping.json
+
+# Generated artifacts
+output/
+logs/
+*.gexf
+*.out
+*.err
+*.log
+*.zip
+
+# Model caches and vendored checkouts
+triton/
+.cache/
+huggingface/

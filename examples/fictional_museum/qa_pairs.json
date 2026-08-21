@@ -1,0 +1,24 @@
+[
+  {
+    "question": "What is the material of the Demonstration Brass Telescope?",
+    "answer": "Brass and glass",
+    "query_type": "find_attribute",
+    "query_details": {"object_title": "Demonstration Brass Telescope", "attribute": "material_desc"}
+  },
+  {
+    "question": "Which organisation produced the Demonstration Brass Telescope?",
+    "answer": "Example Scientific Works",
+    "query_type": "find_related",
+    "query_details": {"object_title": "Demonstration Brass Telescope", "relationship": "has_primary_organisation"}
+  },
+  {
+    "question": "What is the accession number of the related object?",
+    "answer": "SYN-002",
+    "query_type": "find_attribute_of_related_object",
+    "query_details": {
+      "object_title": "Demonstration Brass Telescope",
+      "relationship": "has_related_object",
+      "target_attribute": "accession_no"
+    }
+  }
+]

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuseKG | AI Museum Curator</title>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.34.1/dist/cytoscape.min.js"
+        integrity="sha384-ynDqnMA1DginJi7wSwU6Ob7MKWUKK2+vwP2WXecQBlvo3hTRXKjKYOWuC1GUuyEy"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --sidebar-color: #161b22;
+            --accent-color: #58a6ff;
+            --text-color: #c9d1d9;
+            --card-bg: #21262d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        #sidebar {
+            width: 400px;
+            background-color: var(--sidebar-color);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #30363d;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        #header {
+            padding: 20px;
+            border-bottom: 1px solid #30363d;
+            background: linear-gradient(45deg, #1f6feb, #238636);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #chat-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            background-color: var(--card-bg);
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.user {
+            border-left-color: #238636;
+            align-self: flex-end;
+            background-color: #1c2e23;
+        }
+
+        .message .meta {
+            font-size: 0.75rem;
+            color: #8b949e;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .message-text {
+            white-space: pre-wrap;
+        }
+
+        #input-area {
+            padding: 20px;
+            border-top: 1px solid #30363d;
+            background-color: var(--sidebar-color);
+        }
+
+        #query-input {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--bg-color);
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: white;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+        }
+
+        #query-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        #main-view {
+            flex: 1;
+            position: relative;
+            background: radial-gradient(circle at center, #1c2128 0%, #0d1117 100%);
+        }
+
+        #cy {
+            width: 100%;
+            height: 100%;
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .loader.active {
+            opacity: 1;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
+        }
+
+        /* Info Panel */
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 320px;
+            max-height: calc(100% - 40px);
+            background: rgba(22, 27, 34, 0.95);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 100;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        #info-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        #info-panel h3 {
+            margin: 0 0 15px 0;
+            color: #d2a8ff;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+
+        #info-panel .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #8b949e;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        #info-panel .close-btn:hover {
+            color: #fff;
+        }
+
+        #info-panel .attr-row {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        #info-panel .attr-key {
+            color: #58a6ff;
+            min-width: 120px;
+            font-weight: 500;
+        }
+
+        #info-panel .attr-value {
+            color: #c9d1d9;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        #info-panel .no-attrs {
+            color: #8b949e;
+            font-style: italic;
+        }
+
+        #info-panel .no-image {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #1c2128 0%, #30363d 100%);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8b949e;
+            font-size: 2rem;
+        }
+
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .chip {
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            color: #58a6ff;
+            padding: 5px 10px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            background-color: #30363d;
+            border-color: #58a6ff;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="sidebar">
+        <div id="header">
+            <span>🏛️ MuseKG Demo</span>
+            <div id="loader" class="loader"></div>
+        </div>
+        <div id="chat-container">
+            <div class="message">
+                <span class="meta">System</span>
+                Welcome to MuseKG! I'm your AI curator. Explore the collection by asking questions or selecting an
+                example below:
+                <div class="suggestion-chips">
+                    <button class="chip" onclick="setInput('Tell me about the Demonstration Brass Telescope')">Tell me about the
+                        telescope</button>
+                    <button class="chip" onclick="setInput('Who produced the Demonstration Brass Telescope?')">Who produced the
+                        telescope?</button>
+                    <button class="chip" onclick="setInput('What is the material of the Ceramic Calibration Weight?')">Material of the
+                        calibration weight?</button>
+                    <button class="chip" onclick="setInput('Tell me about the Painted Weather Dial')">Details of the
+                        weather dial</button>
+                </div>
+            </div>
+        </div>
+        <div id="input-area">
+            <textarea id="query-input" rows="2" placeholder="Ask a question..." onkeydown="handleKey(event)"></textarea>
+        </div>
+    </div>
+
+    <div id="main-view">
+        <div id="cy"></div>
+        <div id="info-panel">
+            <button class="close-btn" onclick="closeInfoPanel()">&times;</button>
+            <h3 id="info-title">Node Properties</h3>
+            <div id="info-content"></div>
+        </div>
+    </div>
+
+    <script>
+        function setInput(text) {
+            const input = document.getElementById('query-input');
+            input.value = text;
+            input.focus();
+            // Optional: Auto-submit?
+            // handleKey({ key: 'Enter', preventDefault: () => {} });
+        }
+
+        let cy = cytoscape({
+            container: document.getElementById('cy'),
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'background-color': '#58a6ff',
+                        'label': 'data(label)',
+                        'color': '#fff',
+                        'font-size': '12px',
+                        'text-valign': 'center',
+                        'text-halign': 'center',
+                        'width': 40,
+                        'height': 40,
+                        'text-outline-width': 2,
+                        'text-outline-color': '#0d1117'
+                    }
+                },
+                {
+                    selector: 'node[type="object"]',
+                    style: { 'background-color': '#d2a8ff', 'shape': 'rectangle' }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'width': 2,
+                        'line-color': '#30363d',
+                        'target-arrow-color': '#30363d',
+                        'target-arrow-shape': 'triangle',
+                        'curve-style': 'bezier',
+                        'label': 'data(label)',
+                        'font-size': '10px',
+                        'color': '#8b949e',
+                        'text-rotation': 'autorotate'
+                    }
+                }
+            ]
+        });
+
+        async function handleKey(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                const input = document.getElementById('query-input');
+                const query = input.value.trim();
+                if (!query) return;
+
+                // Add user message
+                addMessage('User', query, 'user');
+                input.value = '';
+                document.getElementById('loader').classList.add('active');
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ query }),
+                        signal: controller.signal
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Server returned HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (!data.answer || !data.graph_data) {
+                        throw new Error('Server returned an incomplete response');
+                    }
+
+                    // Add system response
+                    addMessage('MuseKG', data.answer);
+
+                    // Update Graph
+                    updateGraph(data.graph_data);
+
+                } catch (err) {
+                    const message = err.name === 'AbortError'
+                        ? 'The query timed out. Please try one of the suggested examples.'
+                        : 'Unable to complete the query. Please check the server connection.';
+                    addMessage('System', message);
+                    console.error(err);
+                } finally {
+                    clearTimeout(timeoutId);
+                    document.getElementById('loader').classList.remove('active');
+                }
+            }
+        }
+
+        function addMessage(sender, text, type = '') {
+            const container = document.getElementById('chat-container');
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            const meta = document.createElement('span');
+            meta.className = 'meta';
+            meta.textContent = sender;
+            const messageText = document.createElement('div');
+            messageText.className = 'message-text';
+            messageText.textContent = text;
+            div.append(meta, messageText);
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Store current node attributes for info panel
+        let currentNodeAttrs = {};
+
+        function updateGraph(data) {
+            cy.elements().remove();
+            currentNodeAttrs = {}; // Reset
+            if (data.nodes && data.nodes.length > 0) {
+                // Store attributes for each node
+                data.nodes.forEach(n => {
+                    currentNodeAttrs[n.id] = n;
+                });
+                cy.add(data.nodes.map(n => ({ group: 'nodes', data: n })));
+                cy.add(data.edges.map(e => ({ group: 'edges', data: e })));
+                cy.layout({ name: 'cose', animate: true }).run();
+            }
+            closeInfoPanel();
+        }
+
+        // Handle node click to show info panel
+        cy.on('tap', 'node', function (evt) {
+            const node = evt.target;
+            const nodeData = currentNodeAttrs[node.id()] || node.data();
+            showInfoPanel(nodeData);
+        });
+
+        // Click on background closes panel
+        cy.on('tap', function (evt) {
+            if (evt.target === cy) {
+                closeInfoPanel();
+            }
+        });
+
+        function showInfoPanel(nodeData) {
+            const panel = document.getElementById('info-panel');
+            const title = document.getElementById('info-title');
+            const content = document.getElementById('info-content');
+
+            title.textContent = nodeData.label || nodeData.id || 'Node Properties';
+
+            // Attribute key mapping for display
+            const keyLabels = {
+                'type': 'Type',
+                'material_desc': 'Material',
+                'production_date': 'Production Date',
+                'measurements': 'Measurements',
+                'accession_no': 'Accession No.',
+                'description': 'Description',
+                'collection': 'Collection',
+                'history_cat': 'Category',
+                'object_type': 'Object Type',
+                'ocr_text': 'OCR Text',
+                'museum': 'Museum',
+                'credit_line': 'Credit Line'
+            };
+
+            content.replaceChildren();
+            const skipKeys = ['id', 'label', 'image_url', 'source_id'];
+            let attributesShown = 0;
+
+            if (nodeData.type === 'object') {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'no-image';
+                placeholder.textContent = '🖼️';
+                content.appendChild(placeholder);
+            }
+
+            for (const [key, value] of Object.entries(nodeData)) {
+                if (skipKeys.includes(key) || !value) continue;
+                const displayKey = keyLabels[key] || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+                const row = document.createElement('div');
+                row.className = 'attr-row';
+                const keyElement = document.createElement('span');
+                keyElement.className = 'attr-key';
+                keyElement.textContent = `${displayKey}:`;
+                const valueElement = document.createElement('span');
+                valueElement.className = 'attr-value';
+                valueElement.textContent = String(value);
+                row.append(keyElement, valueElement);
+                content.appendChild(row);
+                attributesShown += 1;
+            }
+
+            if (attributesShown === 0) {
+                const empty = document.createElement('p');
+                empty.className = 'no-attrs';
+                empty.textContent = 'No additional attributes available.';
+                content.appendChild(empty);
+            }
+
+            panel.classList.add('active');
+        }
+
+        function closeInfoPanel() {
+            document.getElementById('info-panel').classList.remove('active');
+        }
+    </script>
+
+</body>
+
+</html>

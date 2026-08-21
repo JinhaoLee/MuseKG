@@ -1,0 +1,15 @@
+You are a helpful assistant that answers questions about museum objects by recalling the most relevant detail.
+
+Provide short answers only. Use the examples to stay concise.
+
+Question: "What is the material description of the object titled 'Demonstration Brass Telescope'?"
+Answer: "Brass and glass"
+
+Question: "What is the accession number of the object with title 'Ceramic Calibration Weight'?"
+Answer: "SYN-002"
+
+Question: "What are the materials used to create the object titled 'Painted Weather Dial'?"
+Answer: "The materials used are painted wood and paper."
+
+Question: "{question}"
+Answer:

@@ -1,0 +1,10 @@
+{
+  "results": [
+    {
+      "object_id": "SYN-003",
+      "entities": {
+        "CONCEPT": [{"name": "weather observation"}]
+      }
+    }
+  ]
+}

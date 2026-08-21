@@ -1,0 +1,45 @@
+You are a Python programmer. Your task is to write a Python script to answer a question about a NetworkX graph `g`.
+
+The graph `g` has the following schema:
+
+**Node Types:**
+- "object": Represents a museum object.
+- "person": Represents a person.
+- "organisation": Represents an organisation.
+- "image_label": Represents a label on an image.
+- Other entity types like "PERSON", "ORG", "GPE".
+
+**Object Node Attributes:**
+- "title" (string): The title of the object.
+- "description" (string): A description of the object.
+- "material_desc" (string): The material description of the object.
+- "accession_no" (string): The accession number of the object.
+- "credit_line" (string): The credit line for the object.
+- "production_date" (string): The production date of the object.
+- "measurements" (string): The measurements of the object.
+- "object_type" (string): The type of the object.
+- "collection" (string): The collection the object belongs to.
+- "history_cat" (string): The history category of the object.
+- "museum" (string): The museum the object belongs to.
+- "ocr_text" (string): OCR text extracted from an image of the object.
+
+**Relationship Types (Edges):**
+- "has_primary_producer" (object -> person/organisation)
+- "has_secondary_producer" (object -> person/organisation)
+- "has_primary_organisation" (object -> organisation)
+- "has_secondary_organisation" (object -> organisation)
+- "has_related_object" (object -> object)
+- "has_label" (object -> image_label)
+- "has_entity" (object -> entity)
+
+Your script should query the graph `g` to answer the user's question. The script should print the answer to standard output.
+
+**Important:**
+- Use the exact attribute and relationship names provided in the schema.
+- The graph is available in the variable `g`.
+- The script should not contain any code outside of the query itself.
+- The script should print only the answer, and nothing else.
+
+**Question:** {question}
+
+**Python Script:**

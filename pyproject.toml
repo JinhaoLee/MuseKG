@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "musekg"
+version = "0.1.0"
+description = "Knowledge graph construction and evaluation for museum collections"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+authors = [
+  {name = "Jinhao Li"},
+  {name = "Jianzhong Qi"},
+  {name = "Soyeon Caren Han"},
+  {name = "Eun-Jung Holden"},
+]
+dependencies = [
+  "ijson>=3.2,<4",
+  "networkx>=3.2,<4",
+]
+
+[project.optional-dependencies]
+demo = [
+  "fastapi>=0.110,<1",
+  "uvicorn>=0.29,<1",
+]
+model = [
+  "accelerate>=0.30,<2",
+  "torch>=2.2,<3",
+  "transformers>=4.45,<6",
+]
+dev = [
+  "pytest>=8,<10",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+musekg-build = "musekg.graph:main"
+musekg-evaluate = "musekg.evaluation:main"
+
+[project.urls]
+Paper = "https://doi.org/10.1145/3805712.3808366"
+Repository = "https://github.com/JinhaoLee/MuseKG"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"musekg.prompts" = ["*.txt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
