@@ -119,5 +119,7 @@ GitHub can also generate a citation from [`CITATION.cff`](CITATION.cff).
 
 ## License
 
-No open-source license has been selected yet. Until a `LICENSE` file is added, copyright
-remains with the authors and normal copyright restrictions apply.
+The MuseKG source code and fictional example collection are licensed under the
+[Apache License 2.0](LICENSE). The accompanying paper is published separately under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The private museum collection
+used in the paper is not distributed or licensed by this repository.
